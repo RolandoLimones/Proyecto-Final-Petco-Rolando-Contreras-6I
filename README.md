@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # petcoapp
 
 A new Flutter project.
@@ -15,3 +16,6 @@ A few resources to get you started if this is your first Flutter project:
 For help getting started with Flutter development, view the
 [online documentation](https://docs.flutter.dev/), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
+=======
+# Proyecto-Final-Petco-Rolando-Contreras-6I
+>>>>>>> 4d3f5f79af3f7b2ba53fd912b888bdafdb4e4199
