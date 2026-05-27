@@ -7,13 +7,13 @@ class Cita {
   final String mascotaNombre;
   final String fecha;
   final String hora;
-  final String
-  motivoTipo; // "Consulta Veterinaria", "Baño y estética", "Aplicación de vacuna"
+  final String motivoTipo;
   final double precio;
-  final String metodoPago; // "Presencial" o "Tarjeta"
-  final String
-  estadoPago; // "Pendiente" o "Pagado" (solo si metodoPago == "Tarjeta")
-  final String estado; // "Pendiente", "Realizada", "Cancelada"
+  final String metodoPago;
+  final String estadoPago;
+  final String estado;
+  final String sucursalId; // new
+  final String sucursalNombre; // new
 
   Cita({
     required this.id,
@@ -28,6 +28,8 @@ class Cita {
     required this.metodoPago,
     required this.estadoPago,
     this.estado = 'Pendiente',
+    required this.sucursalId,
+    required this.sucursalNombre,
   });
 
   factory Cita.fromMap(Map<String, dynamic> map, String documentId) {
@@ -44,6 +46,8 @@ class Cita {
       metodoPago: map['metodoPago'] ?? '',
       estadoPago: map['estadoPago'] ?? '',
       estado: map['estado'] ?? 'Pendiente',
+      sucursalId: map['sucursalId'] ?? '',
+      sucursalNombre: map['sucursalNombre'] ?? '',
     );
   }
 
@@ -60,6 +64,8 @@ class Cita {
       'metodoPago': metodoPago,
       'estadoPago': estadoPago,
       'estado': estado,
+      'sucursalId': sucursalId,
+      'sucursalNombre': sucursalNombre,
     };
   }
 
@@ -76,6 +82,8 @@ class Cita {
     String? metodoPago,
     String? estadoPago,
     String? estado,
+    String? sucursalId,
+    String? sucursalNombre,
   }) {
     return Cita(
       id: id ?? this.id,
@@ -90,6 +98,8 @@ class Cita {
       metodoPago: metodoPago ?? this.metodoPago,
       estadoPago: estadoPago ?? this.estadoPago,
       estado: estado ?? this.estado,
+      sucursalId: sucursalId ?? this.sucursalId,
+      sucursalNombre: sucursalNombre ?? this.sucursalNombre,
     );
   }
 }
