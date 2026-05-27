@@ -1,3 +1,4 @@
+// lib/screens/productos_screen.dart
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -33,7 +34,10 @@ class _ProductosScreenState extends State<ProductosScreen> {
             backgroundColor: Colors.white.withOpacity(0.7),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(24.0),
-              side: BorderSide(color: Colors.white.withOpacity(0.5), width: 1.0),
+              side: BorderSide(
+                color: Colors.white.withOpacity(0.5),
+                width: 1.0,
+              ),
             ),
             title: const Text(
               '¿Eliminar producto?',
@@ -66,14 +70,21 @@ class _ProductosScreenState extends State<ProductosScreen> {
                 onPressed: () async {
                   Navigator.of(ctx).pop();
                   try {
-                    await Provider.of<ProductsProvider>(context, listen: false).deleteProducto(id);
+                    await Provider.of<ProductsProvider>(
+                      context,
+                      listen: false,
+                    ).deleteProducto(id);
                     if (context.mounted) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
-                          content: Text('"$nombre" ha sido eliminado con éxito.'),
+                          content: Text(
+                            '"$nombre" ha sido eliminado con éxito.',
+                          ),
                           backgroundColor: AppColors.darkRed,
                           behavior: SnackBarBehavior.floating,
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
                         ),
                       );
                     }
@@ -122,8 +133,8 @@ class _ProductosScreenState extends State<ProductosScreen> {
     final crossAxisCount = size.width > 900
         ? 4
         : size.width > 600
-            ? 3
-            : 2;
+        ? 3
+        : 2;
 
     return Scaffold(
       backgroundColor: AppColors.background,
@@ -137,7 +148,10 @@ class _ProductosScreenState extends State<ProductosScreen> {
               backgroundColor: Colors.white.withOpacity(0.6),
               elevation: 0,
               leading: IconButton(
-                icon: const Icon(Icons.arrow_back_ios_new_rounded, color: AppColors.textPrimary),
+                icon: const Icon(
+                  Icons.arrow_back_ios_new_rounded,
+                  color: AppColors.textPrimary,
+                ),
                 onPressed: () => context.pop(),
               ),
               title: const Text(
@@ -156,7 +170,7 @@ class _ProductosScreenState extends State<ProductosScreen> {
       ),
       body: Stack(
         children: [
-          // Background decorations
+          // Decoraciones de fondo
           Positioned(
             top: 100,
             right: -40,
@@ -184,73 +198,80 @@ class _ProductosScreenState extends State<ProductosScreen> {
           SafeArea(
             child: productsProvider.loading
                 ? const Center(
-                    child: CircularProgressIndicator(
-                      color: AppColors.darkBlue,
-                    ),
+                    child: CircularProgressIndicator(color: AppColors.darkBlue),
                   )
                 : productsProvider.productos.isEmpty
-                    ? Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Container(
-                              padding: const EdgeInsets.all(24.0),
-                              decoration: BoxDecoration(
-                                color: Colors.white.withOpacity(0.5),
-                                shape: BoxShape.circle,
-                              ),
-                              child: const Icon(
-                                Icons.inventory_2_outlined,
-                                size: 80.0,
-                                color: AppColors.textSecondary,
-                              ),
-                            ),
-                            const SizedBox(height: 24.0),
-                            const Text(
-                              'No hay productos.',
-                              style: TextStyle(
-                                fontFamily: 'Poppins',
-                                fontSize: 18.0,
-                                fontWeight: FontWeight.w600,
-                                color: AppColors.textPrimary,
-                              ),
-                            ),
-                            const SizedBox(height: 8.0),
-                            const Text(
-                              '¡Agrega el primero presionando el botón de abajo!',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontFamily: 'Poppins',
-                                fontSize: 14.0,
-                                color: AppColors.textSecondary,
-                              ),
-                            ),
-                          ],
+                ? Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.all(24.0),
+                          decoration: BoxDecoration(
+                            color: Colors.white.withOpacity(0.5),
+                            shape: BoxShape.circle,
+                          ),
+                          child: const Icon(
+                            Icons.inventory_2_outlined,
+                            size: 80.0,
+                            color: AppColors.textSecondary,
+                          ),
                         ),
-                      )
-                    : GridView.builder(
-                        padding: const EdgeInsets.all(16.0),
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: crossAxisCount,
-                          crossAxisSpacing: 16.0,
-                          mainAxisSpacing: 16.0,
-                          childAspectRatio: 0.78,
+                        const SizedBox(height: 24.0),
+                        const Text(
+                          'No hay productos.',
+                          style: TextStyle(
+                            fontFamily: 'Poppins',
+                            fontSize: 18.0,
+                            fontWeight: FontWeight.w600,
+                            color: AppColors.textPrimary,
+                          ),
                         ),
-                        itemCount: productsProvider.productos.length,
-                        itemBuilder: (context, index) {
-                          final product = productsProvider.productos[index];
-                          return ProductoCard(
-                            producto: product,
-                            currentUserId: currentUserId,
-                            onEdit: () {
-                              context.push('/productos/edit/${product.id}', extra: product);
-                            },
-                            onDelete: () {
-                              _showDeleteDialog(context, product.id, product.nombre);
-                            },
+                        const SizedBox(height: 8.0),
+                        const Text(
+                          '¡Agrega el primero presionando el botón de abajo!',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontFamily: 'Poppins',
+                            fontSize: 14.0,
+                            color: AppColors.textSecondary,
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
+                : GridView.builder(
+                    padding: const EdgeInsets.all(16.0),
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: crossAxisCount,
+                      crossAxisSpacing: 16.0,
+                      mainAxisSpacing: 16.0,
+                      childAspectRatio: 0.78,
+                    ),
+                    itemCount: productsProvider.productos.length,
+                    itemBuilder: (context, index) {
+                      final product = productsProvider.productos[index];
+                      return ProductoCard(
+                        producto: product,
+                        currentUserId: currentUserId,
+                        isAdmin:
+                            true, // Siempre mostrar botones (solo admin accede)
+                        onEdit: () {
+                          context.push(
+                            '/productos/edit/${product.id}',
+                            extra: product,
                           );
                         },
-                      ),
+                        onDelete: () {
+                          _showDeleteDialog(
+                            context,
+                            product.id,
+                            product.nombre,
+                          );
+                        },
+                      );
+                    },
+                  ),
           ),
         ],
       ),
@@ -261,7 +282,9 @@ class _ProductosScreenState extends State<ProductosScreen> {
         backgroundColor: AppColors.darkRed,
         foregroundColor: Colors.white,
         elevation: 6.0,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16.0),
+        ),
         icon: const Icon(Icons.add_rounded),
         label: const Text(
           'Agregar Producto',
