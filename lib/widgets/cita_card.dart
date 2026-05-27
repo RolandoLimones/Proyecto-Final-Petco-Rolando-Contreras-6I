@@ -122,6 +122,26 @@ class CitaCard extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                 ),
               ],
+              if (cita.sucursalNombre.isNotEmpty) ...[
+                const SizedBox(height: 4.0),
+                Row(
+                  children: [
+                    Icon(
+                      Icons.store_rounded,
+                      size: 14,
+                      color: AppColors.textSecondary,
+                    ),
+                    const SizedBox(width: 6),
+                    Text(
+                      'Sucursal: ${cita.sucursalNombre}',
+                      style: const TextStyle(
+                        fontSize: 12.0,
+                        color: AppColors.textSecondary,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
               const SizedBox(height: 4.0),
               Row(
                 children: [
