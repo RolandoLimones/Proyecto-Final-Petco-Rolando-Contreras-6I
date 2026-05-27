@@ -1,3 +1,4 @@
+// lib/widgets/producto_card.dart
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import '../models/producto_model.dart';
@@ -6,6 +7,7 @@ import '../utils/app_colors.dart';
 class ProductoCard extends StatelessWidget {
   final Producto producto;
   final String currentUserId;
+  final bool isAdmin; // Si es admin, siempre muestra botones
   final VoidCallback onEdit;
   final VoidCallback onDelete;
 
@@ -13,6 +15,7 @@ class ProductoCard extends StatelessWidget {
     Key? key,
     required this.producto,
     required this.currentUserId,
+    this.isAdmin = false,
     required this.onEdit,
     required this.onDelete,
   }) : super(key: key);
@@ -23,18 +26,18 @@ class ProductoCard extends StatelessWidget {
     final colors = [
       AppColors.primaryBlue,
       AppColors.primaryRed,
-      const Color(0xFFC3E5D8), // Pastel Mint
-      const Color(0xFFE2C9F3), // Pastel Purple
-      const Color(0xFFF7E2AD), // Pastel Yellow
-      const Color(0xFFF9C5D1), // Pastel Pink
-      const Color(0xFFC5F3E2), // Pastel Cyan
+      const Color(0xFFC3E5D8),
+      const Color(0xFFE2C9F3),
+      const Color(0xFFF7E2AD),
+      const Color(0xFFF9C5D1),
+      const Color(0xFFC5F3E2),
     ];
     return colors[charCode % colors.length];
   }
 
   @override
   Widget build(BuildContext context) {
-    final isCreator = producto.creadorId == currentUserId;
+    final bool showButtons = isAdmin || producto.creadorId == currentUserId;
     final initial = producto.nombre.isNotEmpty
         ? producto.nombre[0].toUpperCase()
         : '?';
@@ -50,7 +53,7 @@ class ProductoCard extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Product Image Placeholder / Circle Avatar
+              // Imagen o avatar
               Center(
                 child:
                     producto.imagenUrl != null && producto.imagenUrl!.isNotEmpty
@@ -93,7 +96,7 @@ class ProductoCard extends StatelessWidget {
               ),
               const SizedBox(height: 12.0),
 
-              // Name
+              // Nombre
               Text(
                 producto.nombre,
                 style: const TextStyle(
@@ -106,7 +109,7 @@ class ProductoCard extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
               ),
 
-              // Category
+              // Categoría
               Text(
                 producto.categoria,
                 style: const TextStyle(
@@ -118,7 +121,7 @@ class ProductoCard extends StatelessWidget {
               ),
               const Spacer(),
 
-              // Price & Actions
+              // Precio y botones
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -131,7 +134,7 @@ class ProductoCard extends StatelessWidget {
                       color: AppColors.darkRed,
                     ),
                   ),
-                  if (isCreator)
+                  if (showButtons)
                     Row(
                       children: [
                         IconButton(
@@ -153,7 +156,8 @@ class ProductoCard extends StatelessWidget {
                           ),
                           padding: EdgeInsets.zero,
                           constraints: const BoxConstraints(),
-                          onPressed: onDelete,
+                          onPressed:
+                              onDelete, // El diálogo lo maneja la pantalla padre
                         ),
                       ],
                     ),
