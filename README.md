@@ -30,7 +30,7 @@
 <br>
 <img width="492" height="918" alt="image" src="https://github.com/user-attachments/assets/7924f453-897b-458d-ad75-049950b3e636" />
 <br>
-<img width="493" height="922" alt="image" src="https://github.com/user-attachments/assets/27d0021d-5c5f-43bf-81fe-5f92ebda3d92" />
+
 <br>
 <br>
 <br>
