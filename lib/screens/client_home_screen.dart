@@ -1,6 +1,7 @@
 // lib/screens/client_home_screen.dart
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:petcocrud/models/sucursal_model.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 
@@ -17,7 +18,7 @@ import '../models/pedido_model.dart';
 import '../models/detalle_pedido_model.dart';
 import '../models/cita_model.dart';
 import '../models/cliente_model.dart';
-
+import '../providers/branches_provider.dart';
 import '../widgets/custom_textfield.dart';
 import '../utils/app_colors.dart';
 
@@ -67,6 +68,9 @@ class _ClientHomeScreenState extends State<ClientHomeScreen> {
   String _selectedMetodoPago = 'Presencial';
   String _appointmentEstadoPago = 'Presencial';
   bool _showCardFormForAppointment = false;
+  List<Sucursal> _sucursales = [];
+  String? _selectedSucursalId;
+  String? _selectedSucursalNombre;
 
   final _appointmentCardController = TextEditingController();
   final _appointmentCardNameController = TextEditingController();
@@ -124,6 +128,14 @@ class _ClientHomeScreenState extends State<ClientHomeScreen> {
           direccion: '',
         ),
       );
+      final branchesProvider = Provider.of<BranchesProvider>(
+        context,
+        listen: false,
+      );
+      await branchesProvider.fetchSucursales();
+      setState(() {
+        _sucursales = branchesProvider.sucursales;
+      });
       setState(() {
         _clientProfile = profile;
         _addressController.text = profile.direccion;
@@ -1032,6 +1044,8 @@ class _ClientHomeScreenState extends State<ClientHomeScreen> {
       precio: _selectedPrecio,
       metodoPago: _selectedMetodoPago,
       estadoPago: _appointmentEstadoPago,
+      sucursalId: _selectedSucursalId!,
+      sucursalNombre: _selectedSucursalNombre!,
       estado: 'Pendiente',
     );
 
@@ -1747,6 +1761,42 @@ class _ClientHomeScreenState extends State<ClientHomeScreen> {
                         ),
                         const SizedBox(height: 12.0),
 
+                        // Sucursal dropdown
+                        DropdownButtonFormField<String>(
+                          value: _selectedSucursalId,
+                          decoration: InputDecoration(
+                            labelText: 'Sucursal',
+                            prefixIcon: const Icon(
+                              Icons.store_rounded,
+                              color: AppColors.textSecondary,
+                            ),
+                            filled: true,
+                            fillColor: Colors.white.withOpacity(0.65),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12.0),
+                            ),
+                          ),
+                          items: _sucursales.map((s) {
+                            return DropdownMenuItem<String>(
+                              value: s.id,
+                              child: Text(s.nombre),
+                            );
+                          }).toList(),
+                          onChanged: (val) {
+                            if (val != null) {
+                              final selected = _sucursales.firstWhere(
+                                (s) => s.id == val,
+                              );
+                              setState(() {
+                                _selectedSucursalId = val;
+                                _selectedSucursalNombre = selected.nombre;
+                              });
+                            }
+                          },
+                          validator: (val) =>
+                              val == null ? 'Seleccione una sucursal' : null,
+                        ),
+                        const SizedBox(height: 12.0),
                         // Método de pago
                         DropdownButtonFormField<String>(
                           value: _selectedMetodoPago,
@@ -1950,6 +2000,7 @@ class _ClientHomeScreenState extends State<ClientHomeScreen> {
                             Text(
                               'Motivo: ${cita.motivoTipo} (\$${cita.precio.toInt()})',
                             ),
+                            Text('Sucursal: ${cita.sucursalNombre}'),
                             Text(
                               'Pago: ${cita.metodoPago == 'Tarjeta' ? cita.estadoPago : cita.metodoPago}',
                             ),
